@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 import sys
 
 import ccalogging
@@ -43,12 +45,20 @@ def getChanVids(ytauth, chan):
         errorNotify(sys.exc_info()[2], e)
 
 
+def makeChannelDir(tvdir, channeld):
+    try:
+        opdir = tvdir.joinpath(channeld)
+        os.makedirs(opdir, exist_ok=True)
+        log.debug(f"created directory '{opdir}'")
+    except Exception as e:
+        errorNotify(sys.exc_info()[2], e)
+
+
 if __name__ == "__main__":
     ccalogging.setConsoleOut()
     ccalogging.setDebug()
+    tvdir = Path("/home/chris/seagate4/youtube")
     ytauth = getAuthService()
-    ## print(dir(ytauth))
-    ## sys.exit(0)
     chans = getSubs(ytauth)
     for cn, chan in enumerate(chans):
         upl = uploadPlaylistForChannel(ytauth, chan["resourceId"]["channelId"])
