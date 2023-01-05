@@ -21,12 +21,14 @@ def checkKeys(xdict, keys):
 
 def checkSubsKind(sub, kind="youtube#channel"):
     try:
-        thing = None if "snippet" not in sub else sub["snippet"]
-        thing = (
-            None if thing is None or "resourceId" not in thing else thing["resourceId"]
-        )
-        thing = None if thing is None or "kind" not in thing else thing["kind"]
-        if thing and thing == kind:
+        check = sub
+        rabbithole = ["snippet", "resourceId", "kind"]
+        for rh in rabbithole:
+            if not checkKeys(check, [rh]):
+                log.debug(f"{check=}, {rh=} - missing key")
+                return False
+            check = check[rh]
+        if check == kind:
             return True
         return False
     except Exception as e:

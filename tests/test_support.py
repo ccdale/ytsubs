@@ -1,6 +1,7 @@
 from ytsubs.support import (
     checkKeys,
     checkPLKind,
+    checkSubsKind,
     checkVideoKind,
     mkTimestamp,
     vidDict,
@@ -21,6 +22,11 @@ def test_checkVideoKind():
 def test_checkPLKind():
     x = {"kind": "youtube#playlistItem"}
     assert checkPLKind(x)
+
+
+def test_checkSubsKind():
+    x = {"snippet": {"resourceId": {"kind": "youtube#channel"}}}
+    assert checkSubsKind(x)
 
 
 def test_checkKeys():
