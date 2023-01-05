@@ -13,6 +13,7 @@ google-auth-oauthlib = "^0.7.1"
 google-auth-httplib2 = "^0.1.0"
 oauth2client = "^4.1.3"
 ccalogging = "^0.4.4"
+pytube = "^12.1.2"
 
 
 [tool.poetry.group.dev.dependencies]
