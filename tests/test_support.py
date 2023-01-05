@@ -1,4 +1,5 @@
 from ytsubs.support import (
+    checkKeys,
     checkPLKind,
     checkVideoKind,
     mkTimestamp,
@@ -20,3 +21,15 @@ def test_checkVideoKind():
 def test_checkPLKind():
     x = {"kind": "youtube#playlistItem"}
     assert checkPLKind(x)
+
+
+def test_checkKeys():
+    x = {"one": 1, "two": 2, "three": 3}
+    y = ["one", "two", "three"]
+    assert checkKeys(x, y)
+
+
+def test_checkKeys_missing_key():
+    x = {"one": 1, "two": 2, "three": 3}
+    y = ["one", "two", "three", "four"]
+    assert False == checkKeys(x, y)

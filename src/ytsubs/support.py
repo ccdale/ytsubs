@@ -9,6 +9,16 @@ log = ccalogging.log
 log.debug(f"importing {__name__} for {__appname__} v{__version__}")
 
 
+def checkKeys(xdict, keys):
+    try:
+        for key in keys:
+            if key not in xdict:
+                return False
+        return True
+    except Exception as e:
+        errorNotify(sys.exc_info()[2], e)
+
+
 def checkSubsKind(sub, kind="youtube#channel"):
     try:
         thing = None if "snippet" not in sub else sub["snippet"]
