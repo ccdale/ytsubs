@@ -44,6 +44,7 @@ def getChanVids(ytauth, chan):
         chantitle = chan["title"]
         plid = uploadPlaylistForChannel(ytauth, chanid)
         items = playlistVids(ytauth, plid, "")
+        return items
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
 
@@ -66,8 +67,10 @@ if __name__ == "__main__":
     yesterday = int(time.time()) - 86400
     Q = queue.Queue()
     for cn, chan in enumerate(chans):
-        upl = uploadPlaylistForChannel(ytauth, chan["resourceId"]["channelId"])
-        items = playlistVids(ytauth, upl, "")
+        items = getChanVids(ytauth, chan)
+        # upl = uploadPlaylistForChannel(ytauth, chan["resourceId"]["channelId"])
+        # items = playlistVids(ytauth, upl, "")
+        items = [] if items is None else items
         for item in items:
             vd = vidDict(item)
             if vd["timestamp"] > yesterday:
@@ -76,3 +79,5 @@ if __name__ == "__main__":
                 )
                 Q.put(vd)
     log.info(f"There are {Q.qsize()} videos to download")
+    # while Q.qsize() > 0:
+    #     item = Q.get()
