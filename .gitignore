@@ -133,3 +133,5 @@ dmypy.json
 # yt creds
 creds
 stackoverflow*
+*json
+example.py
