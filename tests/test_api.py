@@ -7,5 +7,6 @@ def test_getAuthService():
 
 
 def test_getSubscriptions():
-    chans = getSubscriptions()
+    ytauth = getAuthService()
+    chans = getSubscriptions(ytauth)
     assert len(chans) > 0

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import sys
 
 import ccalogging
@@ -41,6 +42,7 @@ def checkVideoKind(resource, kind="youtube#video"):
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
 
+
 def mkTimestamp(timestr):
     """make a unix timestamp, assuming UTC.
 
@@ -49,9 +51,9 @@ def mkTimestamp(timestr):
     try:
         tmstr = timestr[:-1] if timestr.endswith("Z") else timestr
         dt = datetime.fromisoformat(tmstr).astimezone(timezone.utc)
-        return int(dt.timestamp)
+        return int(dt.timestamp())
     except Exception as e:
-    errorNotify(sys.exc_info()[2], e)
+        errorNotify(sys.exc_info()[2], e)
 
 
 def vidDict(item):
