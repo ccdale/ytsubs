@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
+import queue
 import sys
+import time
 
 import ccalogging
 
@@ -12,6 +14,7 @@ from ytsubs.api import (
     playlistVids,
     uploadPlaylistForChannel,
 )
+from ytsubs.support import vidDict
 
 log = ccalogging.log
 
@@ -60,9 +63,16 @@ if __name__ == "__main__":
     tvdir = Path("/home/chris/seagate4/youtube")
     ytauth = getAuthService()
     chans = getSubs(ytauth)
+    yesterday = int(time.time()) - 86400
+    Q = queue.Queue()
     for cn, chan in enumerate(chans):
         upl = uploadPlaylistForChannel(ytauth, chan["resourceId"]["channelId"])
         items = playlistVids(ytauth, upl, "")
-        print(f'{chan["resourceId"]["channelId"]} {chan["title"]} items: {items}')
-        if cn > 10:
-            break
+        for item in items:
+            vd = vidDict(item)
+            if vd["timestamp"] > yesterday:
+                log.debug(
+                    f"adding '{vd['title']}' from channel '{vd['channelTitle']}' to Q"
+                )
+                Q.put(vd)
+    log.info(f"There are {Q.qsize()} videos to download")
