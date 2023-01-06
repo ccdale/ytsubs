@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ytsubs"
-version = "0.1.7"
+version = "0.1.8"
 description = ""
 authors = ["ccdale <chris.charles.allison+ytsubs@gmail.com>"]
 readme = "README.md"
