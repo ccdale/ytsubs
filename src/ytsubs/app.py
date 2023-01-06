@@ -14,6 +14,7 @@ from ytsubs.api import (
     playlistVids,
     uploadPlaylistForChannel,
 )
+from ytsubs.download import makeVideo
 from ytsubs.support import vidDict
 
 log = ccalogging.log
@@ -79,5 +80,7 @@ if __name__ == "__main__":
                 )
                 Q.put(vd)
     log.info(f"There are {Q.qsize()} videos to download")
-    # while Q.qsize() > 0:
-    #     item = Q.get()
+    while Q.qsize() > 0:
+        item = Q.get()
+        opfn, nfofn = makeVideo(item["videoId"], item["channelTitle"])
+        print(f"{opfn=}")
