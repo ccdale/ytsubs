@@ -17,6 +17,8 @@ from ytsubs.api import (
 from ytsubs.download import makeVideo
 from ytsubs.support import vidDict
 
+ccalogging.setLogFile("/home/chris/log/youtube.log")
+ccalogging.setInfo()
 log = ccalogging.log
 
 
@@ -59,28 +61,32 @@ def makeChannelDir(tvdir, channeld):
         errorNotify(sys.exc_info()[2], e)
 
 
+def getVids():
+    try:
+        ytauth = getAuthService()
+        chans = getSubs(ytauth)
+        yesterday = int(time.time()) - 86400
+        Q = queue.Queue()
+        for chan in chans:
+            items = getChanVids(ytauth, chan)
+            items = [] if items is None else items
+            for item in items:
+                vd = vidDict(item)
+                if vd["timestamp"] > yesterday:
+                    log.debug(
+                        f"adding '{vd['title']}' from channel '{vd['channelTitle']}' to Q"
+                    )
+                    Q.put(vd)
+        log.info(f"There are {Q.qsize()} videos to download")
+        while Q.qsize() > 0:
+            item = Q.get()
+            opfn, nfofn = makeVideo(item["videoId"], item["channelTitle"])
+            log.info(f"{opfn=}")
+    except Exception as e:
+        errorNotify(sys.exc_info()[2], e)
+
+
 if __name__ == "__main__":
     ccalogging.setConsoleOut()
     ccalogging.setDebug()
-    tvdir = Path("/home/chris/seagate4/youtube")
-    ytauth = getAuthService()
-    chans = getSubs(ytauth)
-    yesterday = int(time.time()) - 86400
-    Q = queue.Queue()
-    for cn, chan in enumerate(chans):
-        items = getChanVids(ytauth, chan)
-        # upl = uploadPlaylistForChannel(ytauth, chan["resourceId"]["channelId"])
-        # items = playlistVids(ytauth, upl, "")
-        items = [] if items is None else items
-        for item in items:
-            vd = vidDict(item)
-            if vd["timestamp"] > yesterday:
-                log.debug(
-                    f"adding '{vd['title']}' from channel '{vd['channelTitle']}' to Q"
-                )
-                Q.put(vd)
-    log.info(f"There are {Q.qsize()} videos to download")
-    while Q.qsize() > 0:
-        item = Q.get()
-        opfn, nfofn = makeVideo(item["videoId"], item["channelTitle"])
-        print(f"{opfn=}")
+    getVids()
