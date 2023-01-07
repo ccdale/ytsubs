@@ -8,7 +8,6 @@ import ccalogging
 
 from ytsubs import __appname__, __version__, errorNotify, errorRaise, errorExit
 from ytsubs.api import (
-    channelDetails,
     getAuthService,
     getSubscriptions,
     playlistVids,
@@ -94,7 +93,24 @@ def getVids():
 def getPlaylist(plid):
     try:
         ytauth = getAuthService()
-        Q = queue.Queue()
+        items = playlistVids(ytauth, plid)
+        items = [] if items is None else items
+        vitems = []
+        for item in items:
+            vd = vidDict(item)
+            vd["publishedAt"] = item["snippet"]["publishedAt"]
+            log.debug(
+                f"adding '{vd['title']}' from channel '{vd['channelTitle']}' to Q"
+            )
+            vitems.append(vd)
+        log.info(f"There are {len(vitems} videos to download for playlist {plid}")
+        plpath = f"/home/chris/youtube/playlist-{plid}"
+        for item in vitems:
+            opfn, nfofn = makeVideo(item["videoId"], item["channelTitle"], oppath=)
+            log.info(f"{opfn=}\n{nfofn=}")
+            fnfo = makeFilmNfo(item)
+            with open(nfofn, "w") as nfofn:
+                nfofn.write(fnfo)
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
 
@@ -102,4 +118,6 @@ def getPlaylist(plid):
 if __name__ == "__main__":
     ccalogging.setConsoleOut()
     ccalogging.setDebug()
-    getVids()
+    # getVids()
+    if len(sys.argv) > 1:
+        getPlaylist(sys.argv[1])
