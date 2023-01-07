@@ -83,10 +83,10 @@ def getVids():
         while Q.qsize() > 0:
             item = Q.get()
             opfn, nfofn = makeVideo(item["videoId"], item["channelTitle"])
-            fnfo = makeFilmNfo(item)
-            with open(nfofn, "w") as opfn:
-                opfn.write(fnfo)
             log.info(f"{opfn=}\n{nfofn=}")
+            fnfo = makeFilmNfo(item)
+            with open(nfofn, "w") as nfofn:
+                nfofn.write(fnfo)
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
 
