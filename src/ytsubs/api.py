@@ -72,9 +72,14 @@ def channelDetails(ytauth, cid, nextpage):
 
 def playlistVids(ytauth, plid, nextpage):
     try:
+        items = []
         kwargs = {"playlistId": plid, "part": "snippet", "pageToken": nextpage}
-        plvids = ytauth.playlistItems().list(**kwargs).execute()
-        return plvids["items"]
+        plvids = {"nextPageToken": "first"}
+        while plvids["nextPageToken"] != "":
+            plvids = ytauth.playlistItems().list(**kwargs).execute()
+            items.extend(plvids["items"])
+            kwargs["pageToken"] = plvids["nextPageToken"]
+        return items
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
 
