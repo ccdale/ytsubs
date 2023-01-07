@@ -70,7 +70,7 @@ def channelDetails(ytauth, cid, nextpage):
         errorNotify(sys.exc_info()[2], e)
 
 
-def playlistVids(ytauth, plid, nextpage):
+def playlistVids(ytauth, plid):
     try:
         items = []
         kwargs = {"playlistId": plid, "part": "snippet", "pageToken": nextpage}

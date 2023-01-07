@@ -47,7 +47,7 @@ def getChanVids(ytauth, chan):
         chanid = chan["resourceId"]["channelId"]
         chantitle = chan["title"]
         plid = uploadPlaylistForChannel(ytauth, chanid)
-        items = playlistVids(ytauth, plid, "")
+        items = playlistVids(ytauth, plid)
         return items
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
@@ -87,6 +87,14 @@ def getVids():
             fnfo = makeFilmNfo(item)
             with open(nfofn, "w") as nfofn:
                 nfofn.write(fnfo)
+    except Exception as e:
+        errorNotify(sys.exc_info()[2], e)
+
+
+def getPlaylist(plid):
+    try:
+        ytauth = getAuthService()
+        Q = queue.Queue()
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
 
