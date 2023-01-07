@@ -15,6 +15,7 @@ from ytsubs.api import (
     uploadPlaylistForChannel,
 )
 from ytsubs.download import makeVideo
+from ytsubs.nfo import makeFilmNfo
 from ytsubs.support import vidDict
 
 ccalogging.setLogFile("/home/chris/log/youtube.log")
@@ -72,6 +73,7 @@ def getVids():
             items = [] if items is None else items
             for item in items:
                 vd = vidDict(item)
+                vd["publishedAt"] = item["snippet"]["publishedAt"]
                 if vd["timestamp"] > yesterday:
                     log.debug(
                         f"adding '{vd['title']}' from channel '{vd['channelTitle']}' to Q"
@@ -81,7 +83,10 @@ def getVids():
         while Q.qsize() > 0:
             item = Q.get()
             opfn, nfofn = makeVideo(item["videoId"], item["channelTitle"])
-            log.info(f"{opfn=}")
+            fnfo = makeFilmNfo(item)
+            with open(nfofn, "w") as opfn:
+                opfn.write(fnfo)
+            log.info(f"{opfn=}\n{nfofn=}")
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
 
