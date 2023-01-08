@@ -4,7 +4,7 @@ A python application designed to run as the target of a cron event to download
 the latest subscribed youtube videos.
 
 ## install
-Clone this repository and use (poetry)[https://python-poetry.org/] to install
+Clone this repository and use [poetry](https://python-poetry.org/) to install
 the python code.
 
 ```
