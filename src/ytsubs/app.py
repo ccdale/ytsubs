@@ -119,8 +119,10 @@ def getPlaylist(plid):
 
 def setPlaylist():
     try:
-        if len(sys.argv) > 1:
-            getPlaylist(sys.argv[1])
+        if len(sys.argv) != 2:
+            print(f"usage: getplaylist <playlistid>")
+            sys.exit(1)
+        getPlaylist(sys.argv[1])
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
 

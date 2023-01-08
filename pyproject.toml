@@ -21,6 +21,7 @@ pytest = "^7.2.0"
 
 [tool.poetry.scripts]
 getvids = "ytsubs.app:getVids"
+getplaylist = "ytsubs.app:setPlaylist"
 
 [build-system]
 requires = ["poetry-core"]
