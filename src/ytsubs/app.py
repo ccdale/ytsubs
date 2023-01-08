@@ -117,9 +117,15 @@ def getPlaylist(plid):
         errorNotify(sys.exc_info()[2], e)
 
 
+def setPlaylist():
+    try:
+        if len(sys.argv) > 1:
+            getPlaylist(sys.argv[1])
+    except Exception as e:
+        errorNotify(sys.exc_info()[2], e)
+
+
 if __name__ == "__main__":
     ccalogging.setConsoleOut()
     ccalogging.setDebug()
-    # getVids()
-    if len(sys.argv) > 1:
-        getPlaylist(sys.argv[1])
+    setPlaylist()
