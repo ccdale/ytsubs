@@ -12,3 +12,9 @@ git clone https://github.com/ccdale/ytsubs.git
 cd ytsubs
 poetry install
 ```
+
+## credentials
+
+You'll need Google Youtube API credentials to run this application.  Go to
+https://developers.google.com/youtube/v3/getting-started and follow the first 3
+steps to create an application.
