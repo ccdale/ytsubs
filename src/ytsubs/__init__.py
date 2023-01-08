@@ -4,7 +4,7 @@ import ccalogging
 
 log = ccalogging.log
 
-__version__ = "0.1.11"
+__version__ = "0.1.12"
 __appname__ = "ytsubs"
 
 
