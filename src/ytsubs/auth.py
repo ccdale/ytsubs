@@ -21,6 +21,7 @@ def confDirectory():
         confd = Path(xconfd)
         appconf = confd.joinpath(__appname__)
         if not appconf.exists():
+            log.warning(f"Creating configuration directory: {appconf}")
             os.makedirs(appconf, exist_ok=True)
         return appconf
     except Exception as e:
