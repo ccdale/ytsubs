@@ -103,10 +103,12 @@ def getPlaylist(plid):
                 f"adding '{vd['title']}' from channel '{vd['channelTitle']}' to Q"
             )
             vitems.append(vd)
-        log.info(f"There are {len(vitems} videos to download for playlist {plid}")
+        log.info(f"There are {len(vitems)} videos to download for playlist {plid}")
         plpath = f"/home/chris/youtube/playlist-{plid}"
         for item in vitems:
-            opfn, nfofn = makeVideo(item["videoId"], item["channelTitle"], oppath=)
+            opfn, nfofn = makeVideo(
+                item["videoId"], item["channelTitle"], oppath=plpath
+            )
             log.info(f"{opfn=}\n{nfofn=}")
             fnfo = makeFilmNfo(item)
             with open(nfofn, "w") as nfofn:

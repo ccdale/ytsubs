@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import sys
 
@@ -12,13 +13,26 @@ log = ccalogging.log
 log.debug(f"importing {__name__} for {__appname__} v{__version__}")
 
 
-def credsFiles():
-    """returns a tuple of the fqfn for the client and session files."""
+def confDirectory():
     try:
         home = Path.home()
         confd = ".config"
-        clientfn = home.joinpath(confd, __appname__, f"{__appname__}-client.json")
-        sessionfn = home.joinpath(confd, __appname__, f"{__appname__}-session.json")
+        xconfd = os.environ.get("XDG_CONFIG_HOME", str(home.joinpath(confd)))
+        confd = Path(xconfd)
+        appconf = confd.joinpath(__appname__)
+        if not appconf.exists():
+            os.makedirs(appconf, exist_ok=True)
+        return appconf
+    except Exception as e:
+        errorNotify(sys.exc_info()[2], e)
+
+
+def credsFiles():
+    """returns a tuple of the fqfn for the client and session files."""
+    try:
+        confd = confDirectory()
+        clientfn = confd.joinpath(f"{__appname__}-client.json")
+        sessionfn = confd.joinpath(f"{__appname__}-session.json")
         log.debug(f"client file: {clientfn}")
         log.debug(f"session file: {sessionfn}")
         return (clientfn, sessionfn)

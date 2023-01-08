@@ -73,11 +73,13 @@ def channelDetails(ytauth, cid, nextpage):
 def playlistVids(ytauth, plid):
     try:
         items = []
-        kwargs = {"playlistId": plid, "part": "snippet", "pageToken": nextpage}
+        kwargs = {"playlistId": plid, "part": "snippet"}
         plvids = {"nextPageToken": "first"}
         while plvids["nextPageToken"] != "":
             plvids = ytauth.playlistItems().list(**kwargs).execute()
             items.extend(plvids["items"])
+            if "nextPageToken" not in plvids:
+                break
             kwargs["pageToken"] = plvids["nextPageToken"]
         return items
     except Exception as e:
