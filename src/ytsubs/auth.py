@@ -21,8 +21,13 @@ def confDirectory():
         confd = Path(xconfd)
         appconf = confd.joinpath(__appname__)
         if not appconf.exists():
-            log.warning(f"Creating configuration directory: {appconf}")
+            msg = f"""Creating configuration directory: {appconf}
+            Store your google credentials here as {appconf}/ytsubs-client.json
+            See README.md for further information."""
+            log.warning(msg)
+            print(msg)
             os.makedirs(appconf, exist_ok=True)
+            sys.exit(1)
         return appconf
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)
