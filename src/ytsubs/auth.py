@@ -7,7 +7,7 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
 
-from ytsubs import __appname__, __version__
+from ytsubs import __appname__, __version__, errorNotify, errorRaise, errorExit
 
 log = ccalogging.log
 log.debug(f"importing {__name__} for {__appname__} v{__version__}")
