@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ytsubs"
-version = "0.1.15"
+version = "0.1.16"
 description = "A python application designed to run as the target of a cron event to download the latest subscribed youtube videos."
 authors = ["ccdale <chris.charles.allison+ytsubs@gmail.com>"]
 readme = "README.md"
