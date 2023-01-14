@@ -1,7 +1,10 @@
+import httplib2
 import os
 from pathlib import Path
 import sys
 
+from apiclient.discovery import build
+from apiclient.errors import HttpError
 import ccalogging
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
@@ -58,7 +61,8 @@ def authService():
             )
             msg = "OAuth 2.0 not configured, client secrets not found at {clientfn}"
             flow = flow_from_clientsecrets(clientfn, scope=ytrwscope, message=msg)
-            creds = run_flow(flow, store, [])
+            creds = run_flow(flow, store)
         return creds
+    # return build("youtube", "v3", http=creds.authorize(httplib2.Http()))
     except Exception as e:
         errorNotify(sys.exc_info()[2], e)

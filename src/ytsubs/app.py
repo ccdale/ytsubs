@@ -63,9 +63,15 @@ def makeChannelDir(tvdir, channeld):
 
 def getVids():
     try:
+        days = 1
+        if len(sys.argv) > 1:
+            try:
+                days = int(sys.argv[1])
+            except ValueError:
+                pass
         ytauth = getAuthService()
         chans = getSubs(ytauth)
-        yesterday = int(time.time()) - 86400
+        yesterday = int(time.time()) - (86400 * days)
         Q = queue.Queue()
         for chan in chans:
             items = getChanVids(ytauth, chan)
@@ -130,4 +136,5 @@ def setPlaylist():
 if __name__ == "__main__":
     ccalogging.setConsoleOut()
     ccalogging.setDebug()
-    setPlaylist()
+    # setPlaylist()
+    getVids()
